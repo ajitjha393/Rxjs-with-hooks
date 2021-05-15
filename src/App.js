@@ -26,6 +26,7 @@ function App() {
 		<>
 			<h1>Alarm ⏰</h1>
 			<div className="display">{state}</div>
+			<button className="snooze">Snooze 🤧</button>
 		</>
 	)
 }
