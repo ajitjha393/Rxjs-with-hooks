@@ -1,7 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+
+import './global.css'
+
+import {} from 'rxjs'
+import {} from 'rxjs/operators'
 
 function App() {
-	return <div>Main App Page</div>
+	const [state, setState] = useState()
+
+	useEffect(() => {}, [])
+
+	return (
+		<>
+			<h1>Alarm Clock</h1>
+			<div className="display">{state}</div>
+		</>
+	)
 }
 
 export default App
