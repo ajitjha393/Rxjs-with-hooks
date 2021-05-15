@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import './global.css'
 
-import { interval, pipe } from 'rxjs'
+import { interval, concat, of } from 'rxjs'
 import { startWith, scan, takeWhile } from 'rxjs/operators'
 
 const countdown$ = interval(1000).pipe(
@@ -11,18 +11,20 @@ const countdown$ = interval(1000).pipe(
 	takeWhile((time) => time > 0)
 )
 
+const observable$ = concat(countdown$, of('Wake up Sleepy head! 🥳🎉'))
+
 function App() {
 	const [state, setState] = useState()
 
 	useEffect(() => {
-		const subscription = countdown$.subscribe(setState)
+		const subscription = observable$.subscribe(setState)
 
 		return () => subscription.unsubscribe()
 	}, [])
 
 	return (
 		<>
-			<h1>Alarm Clock</h1>
+			<h1>Alarm ⏰</h1>
 			<div className="display">{state}</div>
 		</>
 	)
