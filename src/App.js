@@ -10,6 +10,7 @@ import {
 	repeatWhen,
 	share,
 	filter,
+	takeUntil,
 } from 'rxjs/operators'
 
 const countdown$ = interval(1000)
@@ -26,12 +27,17 @@ action$.subscribe(console.log)
 
 const snooze$ = action$.pipe(filter((action) => action === 'snooze'))
 
+const dismiss$ = action$.pipe(filter((action) => action === 'dismiss'))
+
 const snoozableAlarm$ = concat(
 	countdown$,
 	of('Wake up Sleepy head! 🥳🎉')
 ).pipe(repeatWhen(() => snooze$))
 
-const observable$ = snoozableAlarm$
+const observable$ = concat(
+	snoozableAlarm$.pipe(takeUntil(dismiss$)),
+	of('Have a nice day! 🤗')
+)
 
 function App() {
 	const [state, setState] = useState()
