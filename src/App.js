@@ -11,7 +11,9 @@ function App() {
 	const [state, setState] = useState()
 
 	useEffect(() => {
-		observable$.subscribe(setState)
+		const subscription = observable$.subscribe(setState)
+
+		return () => subscription.unsubscribe()
 	}, [])
 
 	return (
