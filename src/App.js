@@ -31,10 +31,14 @@ function App() {
 
 	return (
 		<>
-			<h1>Alarm ⏰</h1>
+			<h1>Alarm Clock</h1>
 			<div className="display">{state}</div>
 			<button className="snooze" onClick={() => action$.next('snooze')}>
 				Snooze 🤧
+			</button>
+
+			<button className="dismiss" onClick={() => action$.next('dismiss')}>
+				Dismiss 🤨
 			</button>
 		</>
 	)
