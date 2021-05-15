@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react'
 
 import './global.css'
 
-import { interval } from 'rxjs'
-import {} from 'rxjs/operators'
+import { interval, pipe } from 'rxjs'
+import { startWith, scan, takeWhile } from 'rxjs/operators'
 
-const observable$ = interval(1000)
+const countdown$ = interval(1000).pipe(
+	startWith(5),
+	scan((time) => time - 1),
+	takeWhile((time) => time > 0)
+)
 
 function App() {
 	const [state, setState] = useState()
 
 	useEffect(() => {
-		const subscription = observable$.subscribe(setState)
+		const subscription = countdown$.subscribe(setState)
 
 		return () => subscription.unsubscribe()
 	}, [])
