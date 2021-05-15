@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 
 import './global.css'
 
-import { interval, concat, of } from 'rxjs'
-import { startWith, scan, takeWhile } from 'rxjs/operators'
+import { interval, concat, of, Subject } from 'rxjs'
+import { startWith, scan, takeWhile, repeatWhen } from 'rxjs/operators'
 
 const countdown$ = interval(1000).pipe(
 	startWith(5),
@@ -11,7 +11,12 @@ const countdown$ = interval(1000).pipe(
 	takeWhile((time) => time > 0)
 )
 
-const observable$ = concat(countdown$, of('Wake up Sleepy head! 🥳🎉'))
+const action$ = new Subject()
+action$.subscribe(console.log)
+
+const observable$ = concat(countdown$, of('Wake up Sleepy head! 🥳🎉')).pipe(
+	repeatWhen(() => action$)
+)
 
 function App() {
 	const [state, setState] = useState()
@@ -26,7 +31,9 @@ function App() {
 		<>
 			<h1>Alarm ⏰</h1>
 			<div className="display">{state}</div>
-			<button className="snooze">Snooze 🤧</button>
+			<button className="snooze" onClick={() => action$.next('snooze')}>
+				Snooze 🤧
+			</button>
 		</>
 	)
 }
