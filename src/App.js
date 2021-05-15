@@ -3,7 +3,14 @@ import React, { useState, useEffect } from 'react'
 import './global.css'
 
 import { interval, concat, of, Subject } from 'rxjs'
-import { startWith, scan, takeWhile, repeatWhen, share } from 'rxjs/operators'
+import {
+	startWith,
+	scan,
+	takeWhile,
+	repeatWhen,
+	share,
+	filter,
+} from 'rxjs/operators'
 
 const countdown$ = interval(1000)
 	.pipe(
@@ -14,11 +21,17 @@ const countdown$ = interval(1000)
 	.pipe(share())
 
 const action$ = new Subject()
+
 action$.subscribe(console.log)
 
-const observable$ = concat(countdown$, of('Wake up Sleepy head! 🥳🎉')).pipe(
-	repeatWhen(() => action$)
-)
+const snooze$ = action$.pipe(filter((action) => action === 'snooze'))
+
+const snoozableAlarm$ = concat(
+	countdown$,
+	of('Wake up Sleepy head! 🥳🎉')
+).pipe(repeatWhen(() => snooze$))
+
+const observable$ = snoozableAlarm$
 
 function App() {
 	const [state, setState] = useState()
