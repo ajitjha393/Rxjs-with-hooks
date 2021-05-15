@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react'
 
 import './global.css'
 
-import {} from 'rxjs'
+import { interval } from 'rxjs'
 import {} from 'rxjs/operators'
+
+const observable$ = interval(1000)
 
 function App() {
 	const [state, setState] = useState()
 
-	useEffect(() => {}, [])
+	useEffect(() => {
+		observable$.subscribe(setState)
+	}, [])
 
 	return (
 		<>
