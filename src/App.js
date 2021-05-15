@@ -3,13 +3,15 @@ import React, { useState, useEffect } from 'react'
 import './global.css'
 
 import { interval, concat, of, Subject } from 'rxjs'
-import { startWith, scan, takeWhile, repeatWhen } from 'rxjs/operators'
+import { startWith, scan, takeWhile, repeatWhen, share } from 'rxjs/operators'
 
-const countdown$ = interval(1000).pipe(
-	startWith(5),
-	scan((time) => time - 1),
-	takeWhile((time) => time > 0)
-)
+const countdown$ = interval(1000)
+	.pipe(
+		startWith(5),
+		scan((time) => time - 1),
+		takeWhile((time) => time > 0)
+	)
+	.pipe(share())
 
 const action$ = new Subject()
 action$.subscribe(console.log)
